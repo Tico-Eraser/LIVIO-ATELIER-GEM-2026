@@ -1,0 +1,27 @@
+---
+import Header from '../components/Header.astro';
+import Hero from '../components/Hero.astro';
+import WhatsApp from '../components/WhatsApp.astro';
+import Loader from '../components/Loader.astro'; // Yeni ekledik
+import '../styles/global.css';
+---
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LIVIO | Premium Leather Atelier</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;800&display=swap" rel="stylesheet">
+  </head>
+  <body class="bg-[#fdfaf6] antialiased">
+    <Loader />
+    
+    <Header />
+    <main>
+      <Hero />
+    </main>
+    
+    <WhatsApp />
+  </body>
+</html>

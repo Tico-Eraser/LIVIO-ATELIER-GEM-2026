@@ -1,0 +1,33 @@
+---
+// Hero.astro
+---
+
+<section class="relative w-full h-[85vh] overflow-hidden bg-black mt-[160px]">
+  <div class="absolute inset-0">
+    <img 
+      src="/assets/hero-istanbul.jpg" 
+      alt="LIVIO Leather Collection" 
+      class="w-full h-full object-cover object-top animate-hero-breath"
+    />
+    <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+  </div>
+
+  <div class="relative h-full max-w-[1720px] mx-auto px-8 flex flex-col justify-end pb-20">
+    <h2 class="text-white text-5xl md:text-8xl font-extrabold leading-[0.9] tracking-tighter uppercase italic">
+      MODERN ELEGANCE,<br/>
+      <span class="not-italic font-light tracking-normal text-3xl md:text-5xl block mt-4 text-white/90">
+        HANDCRAFTED HERITAGE.
+      </span>
+    </h2>
+  </div>
+</section>
+
+<style>
+  @keyframes hero-breath {
+    0% { transform: scale(1); }
+    100% { transform: scale(1.05); }
+  }
+  .animate-hero-breath {
+    animation: hero-breath 20s infinite alternate ease-in-out;
+  }
+</style>

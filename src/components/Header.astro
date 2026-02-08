@@ -1,0 +1,47 @@
+---
+// Burası "Frontmatter" alanı. Mantık işlemlerini burada yaparız.
+const languages = [
+  { code: 'tr', label: 'TR' },
+  { code: 'en', label: 'EN' },
+  { code: 'ru', label: 'RU' }
+];
+---
+
+<header class="fixed top-10 left-0 w-full z-50 transition-all duration-500 bg-[#fdfaf6]/80 backdrop-blur-md border-b border-black/5">
+  <div class="max-w-[1720px] mx-auto px-8 h-32 flex items-center justify-between relative">
+   
+    <nav class="hidden md:flex gap-10 items-center">
+      <a href="#women" class="text-[11px] font-bold tracking-[3px] text-gray-400 hover:text-black hover:-translate-y-0.5 transition-all duration-300 uppercase italic">Women</a>
+      <a href="#men" class="text-[11px] font-bold tracking-[3px] text-gray-400 hover:text-black hover:-translate-y-0.5 transition-all duration-300 uppercase italic">Men</a>
+    </nav>
+
+    <div class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center justify-center w-full max-w-fit">
+      <h1 class="font-serif text-5xl md:text-6xl tracking-[18px] uppercase font-light m-0 text-center leading-none pl-[18px] text-black">
+        LIVIO
+      </h1>
+      
+      <span class="block text-[11px] tracking-[5px] text-gray-700 font-medium mt-4 text-center w-full pl-[5px]">
+        PREMIUM LEATHER ATELIER
+      </span>
+    </div>
+
+    <div class="flex gap-6 items-center">
+      {languages.map((lang) => (
+        <button 
+         class="text-[12px] font-bold text-gray-400 hover:text-black hover:-translate-y-1 transition-all duration-300 cursor-pointer uppercase"
+          data-lang={lang.code}
+        >
+          {lang.label}
+        </button>
+      ))}
+    </div>
+
+  </div>
+</header>
+
+<style>
+  /* Özel font veya ince ayarlar gerekirse buraya ekleyeceğiz */
+  header {
+    /* S22 Ultra gibi ekranlarda logonun tam merkezde kalması için özel hesaplama */
+  }
+</style>

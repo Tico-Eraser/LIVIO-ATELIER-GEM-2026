@@ -1,0 +1,55 @@
+<div id="loader" class="fixed inset-0 z-[1000] bg-[#fdfaf6] flex flex-col items-center justify-center transition-opacity duration-1000 ease-in-out">
+  <div class="flex flex-col items-center">
+    
+    <div class="h-32 flex items-center justify-center overflow-visible">
+      <h1 class="font-serif text-5xl md:text-7xl tracking-[20px] uppercase font-light animate-porsche-reveal text-black pl-[20px] leading-none">
+        LIVIO
+      </h1>
+    </div>
+
+    <div class="h-[2px] bg-black opacity-0 animate-line-expand shadow-sm mt-2"></div>
+
+    <div class="h-12 flex items-center justify-center mt-6">
+      <span class="block text-[10px] md:text-[12px] tracking-[8px] text-gray-500 uppercase font-medium animate-porsche-reveal-delayed pl-[8px] leading-none">
+        PREMIUM LEATHER ATELIER
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<style>
+  @keyframes porscheReveal {
+    0% { transform: translateY(30px); opacity: 0; filter: blur(10px); }
+    100% { transform: translateY(0); opacity: 1; filter: blur(0); }
+  }
+  @keyframes lineExpand {
+    0% { width: 0; opacity: 0; }
+    100% { width: 280px; opacity: 1; }
+  }
+
+  .animate-porsche-reveal {
+    animation: porscheReveal 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+  }
+  .animate-porsche-reveal-delayed {
+    animation: porscheReveal 1.5s cubic-bezier(0.165, 0.84, 0.44, 1) 0.8s forwards;
+    opacity: 0; /* Başlangıçta gizli tutmak için */
+  }
+  .animate-line-expand {
+    animation: lineExpand 1.8s cubic-bezier(0.165, 0.84, 0.44, 1) 0.4s forwards;
+  }
+</style>
+
+<script>
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      const loader = document.getElementById('loader');
+      if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => {
+          loader.style.display = 'none';
+        }, 1000);
+      }
+    }, 4500); 
+  });
+</script>
