@@ -1,0 +1,29 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/assets/products"
+public_folder: "/assets/products"
+
+collections:
+  - name: "products"
+    label: "Koleksiyon Ürünleri"
+    folder: "src/content/products"
+    create: true
+    slug: "{{model_id}}"
+    summary: "Model: {{model_id}} - {{title}}"
+    fields:
+      - {label: "Model ID (Örn: 3659)", name: "model_id", widget: "string"}
+      - {label: "Ürün İsmi", name: "title", widget: "string"}
+      - {label: "Kapak Resmi", name: "image", widget: "image"}
+      - label: "Ürün Galerisi"
+        name: "gallery"
+        widget: "list"
+        field: {label: "Resim Seç/Çek", name: "img", widget: "image"}
+      - label: "Beden ve Stok Yönetimi"
+        name: "variants"
+        widget: "list"
+        fields:
+          - {label: "Beden", name: "size", widget: "select", options: ["S", "M", "L", "XL", "Standart"]}
+          - {label: "Stok Adedi", name: "stock", widget: "number", default: 0}
+      - {label: "Ürün Hikayesi/Açıklama", name: "body", widget: "markdown", required: false}
