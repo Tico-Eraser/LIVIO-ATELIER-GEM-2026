@@ -1,0 +1,178 @@
+---
+import Layout from '../layouts/Layout.astro';
+import '../styles/global.css';
+
+const allProducts = Object.entries(import.meta.glob('/public/assets/products/*.{png,jpg,jpeg,webp,PNG,JPG,JPEG}', { eager: true }));
+---
+
+<Layout title="LIVIO | Koleksiyon">
+  <main class="pt-32 pb-20 bg-[#fdfaf6] min-h-screen relative">
+    
+    <div id="inquiry-bar" class="fixed top-24 left-0 w-full z-[80] bg-black text-white py-3 px-10 flex justify-between items-center transform -translate-y-20 transition-transform duration-500 shadow-2xl border-b border-white/10">
+      <p class="text-[10px] tracking-[4px] uppercase font-light"><span id="inquiry-count" class="font-bold">0</span> MODEL LİSTEDE</p>
+      <button id="view-list-btn" class="text-[10px] tracking-[3px] uppercase border border-white/30 px-6 py-2 hover:bg-white hover:text-black transition-all font-bold italic">Listeyi Görüntüle</button>
+    </div>
+
+    <div class="max-w-[1400px] mx-auto px-6">
+      <div class="flex flex-col md:flex-row justify-between items-end mb-16 border-b border-black/10 pb-8">
+        <h1 class="font-serif text-5xl tracking-[12px] uppercase font-light text-black italic">Collection</h1>
+        <p class="text-[10px] tracking-[4px] text-gray-400 uppercase">{allProducts.length} Articles</p>
+      </div>
+      
+      <div class="flex flex-wrap justify-center gap-12">
+        {allProducts.map(([path, img]: [string, any]) => {
+          const fileName = path.split('/').pop()?.split('.')[0].replace('IMG_', '') || 'PRODUCT';
+          const imageSrc = path.replace('/public', '');
+
+          return (
+            <div class="product-card w-[280px] group flex flex-col bg-white p-3 shadow-sm border border-black/5 relative transition-all duration-700 hover:shadow-2xl">
+              <button 
+                class="add-to-inquiry absolute top-5 right-5 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm border border-black/10 flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300 shadow-lg"
+                data-id={fileName}
+              >
+                <span class="text-xl pointer-events-none">+</span>
+              </button>
+
+              <div class="relative aspect-[3/4] overflow-hidden bg-[#f4f1ee] mb-6 cursor-pointer open-modal-trigger" data-img={imageSrc} data-id={fileName}>
+                <img src={imageSrc} alt={`LIVIO Model ${fileName}`} class="w-full h-full object-cover transition-transform duration-[2.5s] group-hover:scale-110" />
+                <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                   <span class="text-[10px] text-white tracking-[4px] border border-white/30 px-4 py-2 backdrop-blur-sm">INSPECT</span>
+                </div>
+              </div>
+
+              <div class="space-y-2 text-center pb-4">
+                <h3 class="text-[12px] tracking-[5px] uppercase font-medium text-black">MODEL {fileName}</h3>
+                <p class="text-[9px] text-gray-400 uppercase tracking-[2px]">Premium Leatherwork</p>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+
+    <div id="product-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/95 backdrop-blur-md opacity-0 transition-opacity duration-500">
+      <button id="close-modal" class="absolute top-6 right-6 text-white text-3xl font-light hover:rotate-90 transition-transform z-[110]">&times;</button>
+      <div class="relative w-full max-w-6xl h-full flex flex-col md:flex-row gap-8 items-center">
+        <div id="zoom-container" class="relative flex-1 h-[60vh] md:h-full w-full overflow-hidden bg-zinc-900 flex items-center justify-center cursor-move">
+          <img id="modal-img" src="" class="max-w-full max-h-full transition-transform duration-200 ease-out origin-center" draggable="false" />
+          <div class="absolute bottom-6 left-6 flex gap-4">
+             <button id="reset-zoom" class="bg-white/10 hover:bg-white/20 text-white text-[10px] tracking-[2px] px-4 py-2 border border-white/20 uppercase transition-all">Sıfırla</button>
+          </div>
+        </div>
+        <div class="w-full md:w-[380px] text-white space-y-8 p-6 bg-zinc-900/50 backdrop-blur-sm border border-white/5 shadow-2xl">
+          <div class="space-y-2">
+            <h2 id="modal-title" class="font-serif text-4xl tracking-[8px] uppercase italic text-white">MODEL</h2>
+            <p class="text-[10px] text-zinc-500 tracking-[3px] uppercase font-bold">LIVIO ATELIER</p>
+          </div>
+          <div class="h-[1px] bg-white/10 w-full"></div>
+          <div class="space-y-4 pt-6">
+            <button id="modal-add-btn" class="w-full border border-white/20 text-white text-[11px] tracking-[4px] py-5 font-bold hover:bg-white hover:text-black transition-all duration-500 uppercase">LİSTEYE EKLE</button>
+            <a id="modal-direct-wa" href="#" target="_blank" class="block w-full text-center bg-white text-black text-[11px] tracking-[4px] py-5 font-bold hover:bg-zinc-200 transition-colors uppercase">HEMEN BİLGİ AL</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="list-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/90 backdrop-blur-xl transition-all duration-500">
+      <div class="bg-white w-full max-w-lg p-10 relative shadow-2xl text-black">
+        <button id="close-list" class="absolute top-6 right-6 text-black text-2xl font-light hover:rotate-90 transition-transform">&times;</button>
+        <h2 class="font-serif text-3xl tracking-[6px] uppercase mb-8 border-b border-black/10 pb-6 text-center italic">Teklif Listesi</h2>
+        <div id="modal-list-content" class="max-h-[40vh] overflow-y-auto mb-10 space-y-4 pr-4"></div>
+        <div class="space-y-4">
+            <button id="send-whatsapp" class="w-full bg-black text-white text-[11px] tracking-[4px] py-5 font-bold hover:bg-zinc-800 transition-colors uppercase shadow-lg italic">WhatsApp İle Listeyi Gönder</button>
+            <button id="clear-list" class="w-full border border-black/10 text-[9px] tracking-[3px] py-3 text-gray-400 hover:text-red-600 transition-colors uppercase">Listeyi Temizle</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const WHATSAPP_NUMBER = "905374990926";
+    let inquiryList = JSON.parse(localStorage.getItem('livio_inquiry') || '[]');
+
+    const productModal = document.getElementById('product-modal');
+    const modalImg = document.getElementById('modal-img') as HTMLImageElement;
+    const modalTitle = document.getElementById('modal-title');
+    const modalAddBtn = document.getElementById('modal-add-btn');
+    const modalDirectWa = document.getElementById('modal-direct-wa') as HTMLAnchorElement;
+    const inquiryBar = document.getElementById('inquiry-bar');
+    const inquiryCount = document.getElementById('inquiry-count');
+
+    function updateUI() {
+      inquiryCount.textContent = inquiryList.length.toString();
+      if (inquiryList.length > 0) inquiryBar.classList.remove('-translate-y-20');
+      else inquiryBar.classList.add('-translate-y-20');
+      localStorage.setItem('livio_inquiry', JSON.stringify(inquiryList));
+      document.querySelectorAll('.add-to-inquiry').forEach(btn => {
+        const id = btn.getAttribute('data-id');
+        if (inquiryList.includes(id)) {
+          btn.innerHTML = '✓'; btn.classList.add('bg-black', 'text-white');
+        } else {
+          btn.innerHTML = '+'; btn.classList.remove('bg-black', 'text-white');
+        }
+      });
+    }
+
+    updateUI();
+
+    document.querySelectorAll('.open-modal-trigger').forEach(trigger => {
+      trigger.addEventListener('click', () => {
+        const id = trigger.getAttribute('data-id');
+        const img = trigger.getAttribute('data-img');
+        modalImg.src = img;
+        modalTitle.textContent = `MODEL ${id}`;
+        modalDirectWa.href = `https://wa.me/${WHATSAPP_NUMBER}?text=Merhaba, Model ${id} hakkında bilgi alabilir miyim?`;
+        modalAddBtn.textContent = inquiryList.includes(id) ? "LİSTEDEN ÇIKAR" : "LİSTEYE EKLE";
+        modalAddBtn.setAttribute('data-current-id', id);
+        productModal.classList.remove('hidden');
+        setTimeout(() => productModal.classList.add('opacity-100'), 10);
+      });
+    });
+
+    modalAddBtn.addEventListener('click', () => {
+      const id = modalAddBtn.getAttribute('data-current-id');
+      if (!inquiryList.includes(id)) { inquiryList.push(id); modalAddBtn.textContent = "LİSTEDEN ÇIKAR"; }
+      else { inquiryList = inquiryList.filter(i => i !== id); modalAddBtn.textContent = "LİSTEYE EKLE"; }
+      updateUI();
+    });
+
+    document.getElementById('close-modal').addEventListener('click', () => {
+      productModal.classList.remove('opacity-100');
+      setTimeout(() => productModal.classList.add('hidden'), 500);
+    });
+
+    let scale = 1, translateX = 0, translateY = 0, isDragging = false, startX, startY;
+    const zoomContainer = document.getElementById('zoom-container');
+    zoomContainer.addEventListener('wheel', (e) => { e.preventDefault(); scale = Math.min(Math.max(.5, scale + e.deltaY * -0.001), 4); updateTransform(); });
+    zoomContainer.addEventListener('mousedown', (e) => { isDragging = true; startX = e.clientX - translateX; startY = e.clientY - translateY; });
+    window.addEventListener('mousemove', (e) => { if (!isDragging) return; translateX = e.clientX - startX; translateY = e.clientY - startY; updateTransform(); });
+    window.addEventListener('mouseup', () => isDragging = false);
+    function updateTransform() { modalImg.style.transform = `translate(${translateX}px, ${translateY}px) scale(${scale})`; }
+    document.getElementById('reset-zoom').addEventListener('click', () => { scale = 1; translateX = 0; translateY = 0; updateTransform(); });
+
+    document.querySelectorAll('.add-to-inquiry').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const id = btn.getAttribute('data-id');
+        if (!inquiryList.includes(id)) inquiryList.push(id); else inquiryList = inquiryList.filter(i => i !== id);
+        updateUI();
+      });
+    });
+
+    document.getElementById('view-list-btn').addEventListener('click', () => {
+      document.getElementById('modal-list-content').innerHTML = inquiryList.map(id => `<div class="flex justify-between items-center border-b border-black/5 py-3"><span class="text-[12px] tracking-[3px] uppercase italic">Model ${id}</span></div>`).join('');
+      document.getElementById('list-modal').classList.remove('hidden');
+    });
+
+    document.getElementById('close-list').addEventListener('click', () => document.getElementById('list-modal').classList.add('hidden'));
+
+    document.getElementById('send-whatsapp').addEventListener('click', () => {
+      const msg = `Merhaba LIVIO Atelier, şu modeller için teklif almak istiyorum:\n${inquiryList.map(id => `- Model ${id}`).join('\n')}`;
+      window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
+    });
+
+    document.getElementById('clear-list').addEventListener('click', () => {
+      if(confirm('Liste temizlensin mi?')) { inquiryList = []; updateUI(); location.reload(); }
+    });
+  </script>
+</Layout>

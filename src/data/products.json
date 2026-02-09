@@ -1,0 +1,34 @@
+[
+    {
+        "id": "W-MON-3677",
+        "name": "Model 3677",
+        "category": "Kadın",
+        "type": "Mont",
+        "image": "/assets/products/IMG_3677.jpg",
+        "description": "Premium LIVIO El İşçiliği"
+    },
+    {
+        "id": "W-PAL-3678",
+        "name": "Model 3678",
+        "category": "Kadın",
+        "type": "Palto",
+        "image": "/assets/products/IMG_3678.jpg",
+        "description": "Premium LIVIO El İşçiliği"
+    },
+    {
+        "id": "W-CEK-3653",
+        "name": "Model 3653",
+        "category": "Kadın",
+        "type": "Ceket",
+        "image": "/assets/products/IMG_3653.jpg",
+        "description": "Premium LIVIO El İşçiliği"
+    },
+    {
+        "id": "W-KAB-3654",
+        "name": "Model 3654",
+        "category": "Kadın",
+        "type": "Kaban",
+        "image": "/assets/products/IMG_3654.jpg",
+        "description": "Premium LIVIO El İşçiliği"
+    }
+]
