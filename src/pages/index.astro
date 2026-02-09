@@ -1,27 +1,68 @@
 ---
-import Header from '../components/Header.astro';
-import Hero from '../components/Hero.astro';
-import WhatsApp from '../components/WhatsApp.astro';
-import Loader from '../components/Loader.astro'; // Yeni ekledik
+import Layout from '../layouts/Layout.astro';
 import '../styles/global.css';
 ---
 
-<!doctype html>
-<html lang="tr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>LIVIO | Premium Leather Atelier</title>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200;400;800&display=swap" rel="stylesheet">
-  </head>
-  <body class="bg-[#fdfaf6] antialiased">
-    <Loader />
+<Layout title="LIVIO ATELIER | Handcrafted Excellence">
+  <main class="relative h-screen w-full overflow-hidden bg-black">
     
-    <Header />
-    <main>
-      <Hero />
-    </main>
-    
-    <WhatsApp />
-  </body>
-</html>
+    <video 
+      autoplay 
+      muted 
+      loop 
+      playsinline 
+      class="absolute top-0 left-0 w-full h-full object-cover opacity-60 scale-105"
+    >
+      <source src="/assets/video/atelier.mp4" type="video/mp4" />
+      Tarayıcınız video etiketini desteklemiyor.
+    </video>
+
+    <div class="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-6">
+      
+      <div class="mb-8 overflow-hidden">
+        <h1 class="font-serif text-6xl md:text-9xl text-white tracking-[20px] md:tracking-[40px] uppercase font-light animate-reveal">
+          LIVIO
+        </h1>
+        <p class="text-[10px] md:text-[12px] text-zinc-400 tracking-[10px] md:tracking-[20px] uppercase mt-4">
+          Atelier de Maroquinerie
+        </p>
+      </div>
+
+      <div class="w-24 h-[1px] bg-white/20 mb-12"></div>
+
+      <div class="space-y-6">
+        <h2 class="text-white text-sm md:text-lg tracking-[8px] md:tracking-[15px] uppercase font-light italic">
+          Coming Soon
+        </h2>
+        <p class="text-zinc-500 text-[10px] tracking-[4px] uppercase max-w-md mx-auto leading-loose">
+          Zanaat ve asaletin buluştuğu yeni koleksiyon hazırlık aşamasında.
+        </p>
+      </div>
+
+      <div class="mt-16">
+        <a href="/katalog" class="group relative px-12 py-5 overflow-hidden border border-white/20 inline-block">
+          <div class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
+          <span class="relative z-20 text-white group-hover:text-black text-[10px] tracking-[6px] uppercase font-bold transition-colors">
+            Koleksiyonu Keşfet
+          </span>
+        </a>
+      </div>
+
+    </div>
+
+    <div class="absolute bottom-10 left-0 w-full text-center z-10">
+      <p class="text-zinc-600 text-[9px] tracking-[3px] uppercase">Istanbul &bull; 2026</p>
+    </div>
+
+  </main>
+</Layout>
+
+<style>
+  .animate-reveal {
+    animation: reveal 2.5s cubic-bezier(0.77, 0, 0.175, 1);
+  }
+  @keyframes reveal {
+    0% { transform: translateY(100%); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }
+</style>
