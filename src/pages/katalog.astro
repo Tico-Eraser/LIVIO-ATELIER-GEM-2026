@@ -2,14 +2,15 @@
 import Layout from '../layouts/Layout.astro';
 import '../styles/global.css';
 
-// 1. ADIM: Tüm resimleri tara ve grupla
+// 1. ADIM: Tüm resimleri tara ve model numarasına göre grupla
 const allImages = Object.entries(import.meta.glob('/public/assets/products/*.{png,jpg,jpeg,webp,PNG,JPG,JPEG}', { eager: true }));
 
 const productGroups: any = {};
 allImages.forEach(([path, img]: [string, any]) => {
   const fileName = path.split('/').pop()?.split('.')[0] || '';
-  // IMG_3659_1 -> 3659 (Gerçek model numarası)
-  const modelId = fileName.replace('IMG_', '').split('_')[0]; 
+  
+  // Düzeltme: IMG_ kısmını temizle ve sadece ana model numarasını (3659 gibi) al
+  const modelId = fileName.replace(/^IMG_/i, '').split('_')[0]; 
   const imageSrc = path.replace('/public', '');
 
   if (!productGroups[modelId]) {
@@ -37,17 +38,22 @@ const productIds = Object.keys(productGroups).sort();
       
       <div class="flex flex-wrap justify-center gap-12">
         {productIds.map((id) => {
-          const mainImage = productGroups[id].find(img => img.includes('_1')) || productGroups[id][0];
+          // Kapak resmi olarak varsa sonu _1 olanı, yoksa ilkini seç
+          const mainImage = productGroups[id].find(img => img.toLowerCase().includes('_1')) || productGroups[id][0];
+          
           return (
             <div class="product-card w-[280px] group flex flex-col bg-white p-3 shadow-sm border border-black/5 relative transition-all duration-700 hover:shadow-2xl">
-              <button class="add-to-inquiry absolute top-5 right-5 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm border border-black/10 flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300 shadow-lg" data-id={id}>
+              <button 
+                class="add-to-inquiry absolute top-5 right-5 z-20 w-10 h-10 rounded-full bg-white/90 backdrop-blur-sm border border-black/10 flex items-center justify-center hover:bg-black hover:text-white transition-all duration-300 shadow-lg"
+                data-id={id}
+              >
                 <span class="text-xl pointer-events-none">+</span>
               </button>
 
               <div class="relative aspect-[3/4] overflow-hidden bg-[#f4f1ee] mb-6 cursor-pointer open-modal-trigger" data-images={JSON.stringify(productGroups[id])} data-id={id}>
                 <img src={mainImage} alt={`LIVIO Model ${id}`} class="w-full h-full object-cover transition-transform duration-[2.5s] group-hover:scale-110" />
                 <div class="absolute inset-0 bg-black/5 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                   <span class="text-[10px] text-white tracking-[4px] border border-white/30 px-4 py-2 backdrop-blur-sm italic font-bold uppercase">Detayları İncele</span>
+                   <span class="text-[10px] text-white tracking-[4px] border border-white/30 px-4 py-2 backdrop-blur-sm italic font-bold">DETAYLARI İNCELE</span>
                 </div>
               </div>
 
@@ -63,16 +69,20 @@ const productIds = Object.keys(productGroups).sort();
 
     <div id="product-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-4 bg-black/95 backdrop-blur-md opacity-0 transition-opacity duration-500">
       <button id="close-modal" class="absolute top-6 right-6 text-white text-3xl font-light hover:rotate-90 transition-transform z-[110]">&times;</button>
+      
       <div class="relative w-full max-w-6xl h-full flex flex-col md:flex-row gap-8 items-center">
         <div id="zoom-container" class="relative flex-1 h-[60vh] md:h-full w-full overflow-hidden bg-zinc-900 flex items-center justify-center group/slider">
-          <img id="modal-img" src="" class="max-w-full max-h-full transition-all duration-300 ease-out origin-center" draggable="false" />
+          <img id="modal-img" src="" class="max-w-full max-h-full transition-all duration-300 ease-out origin-center shadow-2xl" draggable="false" />
+          
           <button id="prev-img" class="absolute left-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white text-5xl p-4 transition-all opacity-0 group-hover/slider:opacity-100">&lsaquo;</button>
           <button id="next-img" class="absolute right-4 top-1/2 -translate-y-1/2 text-white/50 hover:text-white text-5xl p-4 transition-all opacity-0 group-hover/slider:opacity-100">&rsaquo;</button>
+          
           <div class="absolute bottom-6 left-6 flex gap-6 items-center">
              <button id="reset-zoom" class="bg-white/10 hover:bg-white/20 text-white text-[9px] tracking-[3px] px-4 py-2 border border-white/10 uppercase font-bold">Sıfırla</button>
              <div id="image-counter" class="text-white/30 text-[10px] tracking-[4px] uppercase italic">1 / 1</div>
           </div>
         </div>
+
         <div class="w-full md:w-[380px] text-white space-y-8 p-6 bg-zinc-900/50 backdrop-blur-sm border border-white/5 shadow-2xl">
           <h2 id="modal-title" class="font-serif text-4xl tracking-[8px] uppercase italic text-white border-b border-white/10 pb-6">MODEL</h2>
           <div class="space-y-4 pt-6">
@@ -84,11 +94,11 @@ const productIds = Object.keys(productGroups).sort();
     </div>
 
     <div id="list-modal" class="fixed inset-0 z-[100] hidden flex items-center justify-center p-6 bg-black/90 backdrop-blur-xl transition-all duration-500">
-      <div class="bg-white w-full max-w-lg p-10 relative shadow-2xl text-black text-center">
+      <div class="bg-white w-full max-w-lg p-10 relative shadow-2xl text-black">
         <button id="close-list" class="absolute top-6 right-6 text-black text-2xl font-light hover:rotate-90">&times;</button>
-        <h2 class="font-serif text-3xl tracking-[6px] uppercase mb-8 border-b border-black/10 pb-6 italic">Teklif Listesi</h2>
+        <h2 class="font-serif text-3xl tracking-[6px] uppercase mb-8 border-b border-black/10 pb-6 text-center italic">Teklif Listesi</h2>
         <div id="modal-list-content" class="max-h-[40vh] overflow-y-auto mb-10 space-y-4 pr-4"></div>
-        <div class="space-y-4">
+        <div class="space-y-4 text-center">
             <button id="send-whatsapp" class="w-full bg-black text-white text-[11px] tracking-[4px] py-5 font-bold uppercase italic shadow-lg">WhatsApp İle Gönder</button>
             <button id="clear-list" class="w-full border border-black/10 text-[9px] tracking-[3px] py-3 text-gray-400 hover:text-red-600 transition-colors uppercase">Temizle</button>
         </div>
@@ -97,19 +107,17 @@ const productIds = Object.keys(productGroups).sort();
   </main>
 
   <script>
-    // 1. YAPILANDIRMA VE DEĞİŞKENLER
-    const WHATSAPP_NUMBER = "905425310653";
+    const WHATSAPP_NUMBER = "905374990926";
     let inquiryList = JSON.parse(localStorage.getItem('livio_inquiry') || '[]');
-    const SITE_URL = window.location.origin; // Sitenin o anki adresini (Codespace linkini) alır
+    let currentImages = [];
+    let currentIndex = 0;
+    const SITE_URL = window.location.origin;
 
     const modal = document.getElementById('product-modal');
     const modalImg = document.getElementById('modal-img') as HTMLImageElement;
     const inquiryBar = document.getElementById('inquiry-bar');
     const inquiryCount = document.getElementById('inquiry-count');
-    let currentImages = [];
-    let currentIndex = 0;
 
-    // 2. ARAYÜZÜ GÜNCELLEME (SEPET VE BUTONLAR)
     function updateUI() {
       inquiryCount.textContent = inquiryList.length.toString();
       if (inquiryList.length > 0) inquiryBar.classList.remove('-translate-y-20');
@@ -127,7 +135,6 @@ const productIds = Object.keys(productGroups).sort();
       });
     }
 
-    // 3. SLIDER MANTIĞI
     function showImage(index) {
       modalImg.classList.add('opacity-0');
       setTimeout(() => {
@@ -139,7 +146,8 @@ const productIds = Object.keys(productGroups).sort();
       }, 200);
     }
 
-    // 4. MODAL VE WHATSAPP LİNKİ OLUŞTURMA
+    updateUI();
+
     document.querySelectorAll('.open-modal-trigger').forEach(trigger => {
       trigger.addEventListener('click', () => {
         const id = trigger.getAttribute('data-id');
@@ -149,9 +157,8 @@ const productIds = Object.keys(productGroups).sort();
 
         document.getElementById('modal-title').textContent = `MODEL ${id}`;
         
-        // Bireysel WhatsApp Linki (Ürün linki dahil)
-        const productUrl = `${SITE_URL}/urun/${id}`;
-        const directMsg = `Merhaba, Model ${id} hakkında bilgi alabilir miyim?\nÜrün Detayı: ${productUrl}`;
+        const productUrl = `${SITE_URL}/katalog`; // Şimdilik kataloğa yönlendirsin
+        const directMsg = `Merhaba, Model ${id} hakkında bilgi alabilir miyim?\nSitede incele: ${productUrl}`;
         (document.getElementById('modal-direct-wa') as HTMLAnchorElement).href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(directMsg)}`;
         
         const addBtn = document.getElementById('modal-add-btn');
@@ -163,7 +170,6 @@ const productIds = Object.keys(productGroups).sort();
       });
     });
 
-    // 5. BUTON OLAYLARI (CLICK EVENTS)
     document.getElementById('next-img').addEventListener('click', () => showImage((currentIndex + 1) % currentImages.length));
     document.getElementById('prev-img').addEventListener('click', () => showImage((currentIndex - 1 + currentImages.length) % currentImages.length));
     document.getElementById('close-modal').addEventListener('click', () => { modal.classList.remove('opacity-100'); setTimeout(() => modal.classList.add('hidden'), 500); });
@@ -184,14 +190,13 @@ const productIds = Object.keys(productGroups).sort();
       updateUI();
     });
 
-    // 6. TOPLU LİSTE GÖNDERİMİ (WHATSAPP)
     document.getElementById('send-whatsapp').addEventListener('click', () => {
-      const listWithLinks = inquiryList.map(id => `- Model ${id} (${SITE_URL}/urun/${id})`).join('\n');
+      const listWithLinks = inquiryList.map(id => `- Model ${id} (${SITE_URL}/katalog)`).join('\n');
       const msg = `Merhaba LIVIO Atelier, şu modeller için teklif almak istiyorum:\n\n${listWithLinks}`;
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, '_blank');
     });
 
-    // 7. ZOOM VE DİĞER YARDIMCILAR
+    // ZOOM VE DİĞERLERİ
     let scale = 1, translateX = 0, translateY = 0, isDragging = false, startX, startY;
     const zoomContainer = document.getElementById('zoom-container');
     zoomContainer?.addEventListener('wheel', (e) => { e.preventDefault(); scale = Math.min(Math.max(.5, scale + e.deltaY * -0.001), 4); updateTransform(); });
@@ -209,8 +214,5 @@ const productIds = Object.keys(productGroups).sort();
 
     document.getElementById('close-list').addEventListener('click', () => document.getElementById('list-modal').classList.add('hidden'));
     document.getElementById('clear-list').addEventListener('click', () => { if(confirm('Liste temizlensin mi?')) { inquiryList = []; updateUI(); location.reload(); } });
-
-    // İlk yüklemede UI'ı çalıştır
-    updateUI();
   </script>
 </Layout>

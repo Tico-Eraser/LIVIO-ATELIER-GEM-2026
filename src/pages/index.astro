@@ -3,44 +3,43 @@ import Layout from '../layouts/Layout.astro';
 import '../styles/global.css';
 ---
 
-<Layout title="LIVIO ATELIER | Handcrafted Excellence">
-  <main class="relative h-screen w-full overflow-hidden bg-black">
+<Layout title="LIVIO ATELIER | Premium Leatherwork">
+  <main class="relative h-screen w-full overflow-hidden bg-black flex items-center justify-center">
     
-    <video 
-      autoplay 
-      muted 
-      loop 
-      playsinline 
-      class="absolute top-0 left-0 w-full h-full object-cover opacity-60 scale-105"
-    >
-      <source src="/assets/video/atelier.mp4" type="video/mp4" />
-      Tarayıcınız video etiketini desteklemiyor.
-    </video>
+    <div class="absolute inset-0 z-0">
+      <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-50">
+        <source src="/assets/video/atelier.mp4" type="video/mp4" />
+      </video>
+      <div class="absolute inset-0 bg-black/40"></div>
+    </div>
 
-    <div class="relative z-10 h-full w-full flex flex-col items-center justify-center text-center px-6">
+    <div class="relative z-10 w-full flex flex-col items-center text-center px-6">
       
-      <div class="mb-8 overflow-hidden">
-        <h1 class="font-serif text-6xl md:text-9xl text-white tracking-[20px] md:tracking-[40px] uppercase font-light animate-reveal">
+      <div class="mb-12">
+        <h1 class="font-serif text-6xl md:text-9xl text-white tracking-[20px] md:tracking-[40px] uppercase font-light animate-reveal pl-[20px] md:pl-[40px]">
           LIVIO
         </h1>
-        <p class="text-[10px] md:text-[12px] text-zinc-400 tracking-[10px] md:tracking-[20px] uppercase mt-4">
-          Atelier de Maroquinerie
-        </p>
+        
+        <div class="flex items-center justify-center mt-8 space-x-4 md:space-x-8">
+          <div class="h-[1px] w-8 md:w-16 bg-white/20"></div>
+          <p class="text-[10px] md:text-[12px] text-white tracking-[6px] md:tracking-[10px] uppercase font-medium whitespace-nowrap">
+            PREMIUM LEATHER ATELIER
+          </p>
+          <div class="h-[1px] w-8 md:w-16 bg-white/20"></div>
+        </div>
       </div>
 
-      <div class="w-24 h-[1px] bg-white/20 mb-12"></div>
-
-      <div class="space-y-6">
-        <h2 class="text-white text-sm md:text-lg tracking-[8px] md:tracking-[15px] uppercase font-light italic">
+      <div class="mb-16 space-y-6">
+        <h2 class="text-zinc-200 text-lg md:text-2xl tracking-[12px] md:tracking-[18px] uppercase font-light italic">
           Coming Soon
         </h2>
-        <p class="text-zinc-500 text-[10px] tracking-[4px] uppercase max-w-md mx-auto leading-loose">
+        <p class="text-zinc-400 text-[9px] md:text-[10px] tracking-[4px] uppercase max-w-md mx-auto leading-loose opacity-80">
           Zanaat ve asaletin buluştuğu yeni koleksiyon hazırlık aşamasında.
         </p>
       </div>
 
-      <div class="mt-16">
-        <a href="/katalog" class="group relative px-12 py-5 overflow-hidden border border-white/20 inline-block">
+      <div class="mt-4">
+        <a href="/katalog" class="group relative px-12 py-5 overflow-hidden border border-white/20 inline-block transition-all hover:border-white">
           <div class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
           <span class="relative z-20 text-white group-hover:text-black text-[10px] tracking-[6px] uppercase font-bold transition-colors">
             Koleksiyonu Keşfet
@@ -50,8 +49,8 @@ import '../styles/global.css';
 
     </div>
 
-    <div class="absolute bottom-10 left-0 w-full text-center z-10">
-      <p class="text-zinc-600 text-[9px] tracking-[3px] uppercase">Istanbul &bull; 2026</p>
+    <div class="absolute bottom-10 w-full text-center z-10">
+      <p class="text-zinc-600 text-[9px] tracking-[4px] uppercase">Istanbul &bull; 2026</p>
     </div>
 
   </main>
@@ -62,7 +61,7 @@ import '../styles/global.css';
     animation: reveal 2.5s cubic-bezier(0.77, 0, 0.175, 1);
   }
   @keyframes reveal {
-    0% { transform: translateY(100%); opacity: 0; }
+    0% { transform: translateY(20px); opacity: 0; }
     100% { transform: translateY(0); opacity: 1; }
   }
 </style>
