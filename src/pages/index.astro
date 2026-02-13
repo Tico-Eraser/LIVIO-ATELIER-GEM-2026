@@ -1,67 +1,161 @@
 ---
+import { getCollection } from 'astro:content';
 import Layout from '../layouts/Layout.astro';
-import '../styles/global.css';
+
+// 1. Admin panelinden (CMS) gelen ürünleri çekiyoruz
+const allProducts = await getCollection('products');
+// 2. Ana sayfada en yeni 6 tanesini gösteriyoruz
+const featuredProducts = allProducts.slice(0, 6);
 ---
 
-<Layout title="LIVIO ATELIER | Premium Leatherwork">
-  <main class="relative h-screen w-full overflow-hidden bg-black flex items-center justify-center">
-    
-    <div class="absolute inset-0 z-0">
-      <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-50">
-        <source src="/assets/video/atelier.mp4" type="video/mp4" />
-      </video>
-      <div class="absolute inset-0 bg-black/40"></div>
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+<Layout title="LIVIO | Premium Leather Atelier">
+  <div class="redesign-banner">LIVIO — Atölye Yönetim Paneli Hazır</div>
+
+  <nav class="premium-nav">
+    <a class="nav-brand" href="/">LIVIO</a>
+    <div class="nav-right">
+      <div class="lang-switcher">
+        <a href="#" class="active">EN</a>
+        <span class="lang-sep">|</span>
+        <a href="#">TR</a>
+      </div>
+      <button class="nav-contact">İletişim</button>
     </div>
+  </nav>
 
-    <div class="relative z-10 w-full flex flex-col items-center text-center px-6">
-      
-      <div class="mb-12">
-        <h1 class="font-serif text-6xl md:text-9xl text-white tracking-[20px] md:tracking-[40px] uppercase font-light animate-reveal pl-[20px] md:pl-[40px]">
-          LIVIO
-        </h1>
-        
-        <div class="flex items-center justify-center mt-8 space-x-4 md:space-x-8">
-          <div class="h-[1px] w-8 md:w-16 bg-white/20"></div>
-          <p class="text-[10px] md:text-[12px] text-white tracking-[6px] md:tracking-[10px] uppercase font-medium whitespace-nowrap">
-            PREMIUM LEATHER ATELIER
-          </p>
-          <div class="h-[1px] w-8 md:w-16 bg-white/20"></div>
-        </div>
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <span class="hero-vert-left">Premium Deri Atölyesi — Est. 2024</span>
+    <span class="hero-vert-right">Handmade Quality</span>
+
+    <div class="hero-content">
+      <p class="hero-eyebrow">Premium Leather Atelier</p>
+      <h1 class="hero-title">LIVIO</h1>
+      <div class="hero-divider">
+        <div class="hero-divider-line"></div>
+        <div class="hero-divider-diamond"></div>
+        <div class="hero-divider-line"></div>
       </div>
-
-      <div class="mb-16 space-y-6">
-        <h2 class="text-zinc-200 text-lg md:text-2xl tracking-[12px] md:tracking-[18px] uppercase font-light italic">
-          Coming Soon
-        </h2>
-        <p class="text-zinc-400 text-[9px] md:text-[10px] tracking-[4px] uppercase max-w-md mx-auto leading-loose opacity-80">
-          Zanaat ve asaletin buluştuğu yeni koleksiyon hazırlık aşamasında.
-        </p>
-      </div>
-
-      <div class="mt-4">
-        <a href="/katalog" class="group relative px-12 py-5 overflow-hidden border border-white/20 inline-block transition-all hover:border-white">
-          <div class="absolute inset-0 bg-white translate-y-full group-hover:translate-y-0 transition-transform duration-500"></div>
-          <span class="relative z-20 text-white group-hover:text-black text-[10px] tracking-[6px] uppercase font-bold transition-colors">
-            Koleksiyonu Keşfet
-          </span>
+      <p class="hero-subtitle">
+        Concierge-crafted leather, cut and finished with tailor-level precision.
+      </p>
+      <div class="hero-cta">
+        <a href="/katalog">
+          Koleksiyonu Keşfet
+          <span class="hero-cta-arrow"></span>
         </a>
       </div>
+    </div>
+  </section>
 
+  <section class="featured">
+    <div class="section-header">
+      <div>
+        <p class="section-label">Öne Çıkan</p>
+        <h2 class="section-title">Güncel Koleksiyon</h2>
+      </div>
+      <a href="/katalog" class="section-link">Tümünü Gör →</a>
     </div>
 
-    <div class="absolute bottom-10 w-full text-center z-10">
-      <p class="text-zinc-600 text-[9px] tracking-[4px] uppercase">Istanbul &bull; 2026</p>
-    </div>
+    <div class="product-grid">
+      {featuredProducts.map((product) => {
+        const totalStock = product.data.variants.reduce((acc, v) => acc + v.stock, 0);
 
-  </main>
+        return (
+          <a href={`/katalog/${product.id}`} class="product-card">
+            <img src={product.data.image} alt={product.data.title} class="product-card-img" />
+            <div class="product-card-overlay">
+              <div class="product-card-info">
+                <p class="product-card-id">{product.data.model_id}</p>
+                <p class="product-card-name">{product.data.title}</p>
+                
+                <div class="stock-status">
+                  {totalStock === 0 ? (
+                    <span class="status-out">Stok Yok</span>
+                  ) : totalStock <= 3 ? (
+                    <span class="status-limited">Sınırlı Stok ({totalStock})</span>
+                  ) : (
+                    <span class="status-ok">Stokta Mevcut</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </section>
+
+  <div class="manifesto">
+    <div class="manifesto-item">
+      <div class="manifesto-num">64+</div>
+      <div class="manifesto-label">Koleksiyon Modeli</div>
+    </div>
+    <div class="manifesto-item">
+      <div class="manifesto-num">100%</div>
+      <div class="manifesto-label">El İşçiliği</div>
+    </div>
+  </div>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
 </Layout>
 
 <style>
-  .animate-reveal {
-    animation: reveal 2.5s cubic-bezier(0.77, 0, 0.175, 1);
+  .premium-nav { position: fixed; top: 36px; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 20px 48px; background: rgba(14,12,10,0.8); backdrop-filter: blur(8px); }
+  .nav-brand { font-family: 'Cormorant Garamond', serif; font-size: 22px; letter-spacing: 0.35em; color: var(--cream); text-decoration: none; }
+  .nav-right { display: flex; align-items: center; gap: 28px; }
+  .lang-switcher { font-size: 9px; letter-spacing: 0.3em; color: var(--text-muted); display: flex; gap: 10px; }
+  .lang-switcher a.active { color: var(--gold); }
+  
+  .hero { position: relative; min-height: 100vh; display: flex; align-items: center; justify-content: center; overflow: hidden; background: var(--dark); }
+  .hero-title { font-family: 'Cormorant Garamond', serif; font-size: clamp(88px, 14vw, 160px); font-weight: 300; letter-spacing: 0.12em; color: var(--cream); position: relative; }
+  .hero-title::after { content: ''; position: absolute; bottom: 18%; left: -4%; width: 108%; height: 1px; background: var(--gold); opacity: 0.35; }
+
+  .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; padding: 0 48px; }
+  @media (min-width: 768px) {
+    .product-grid { grid-template-columns: 1.4fr 1fr 1fr 1.4fr; }
+    .product-card:nth-child(1), .product-card:nth-child(4) { grid-row: span 2; }
   }
-  @keyframes reveal {
-    0% { transform: translateY(20px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
-  }
+
+  .product-card { position: relative; overflow: hidden; background: #1a1714; text-decoration: none; }
+  .product-card-img { width: 100%; aspect-ratio: 3/4; object-fit: cover; transition: transform 0.8s ease; }
+  .product-card-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); display: flex; align-items: flex-end; padding: 20px; opacity: 0; transition: opacity 0.4s; }
+  .product-card:hover .product-card-overlay { opacity: 1; }
+
+  .status-limited { color: var(--gold); font-style: italic; font-size: 11px; }
+  .status-out { color: #ff4d4d; font-size: 11px; }
+  .status-ok { color: var(--cream); opacity: 0.5; font-size: 11px; }
+
+  .cursor { position: fixed; width: 8px; height: 8px; background: var(--gold); border-radius: 50%; pointer-events: none; z-index: 9999; mix-blend-mode: difference; }
+  .cursor-ring { position: fixed; width: 36px; height: 36px; border: 1px solid var(--gold); border-radius: 50%; pointer-events: none; z-index: 9998; transition: transform 0.15s ease; }
+  @media (max-width: 768px) { .cursor, .cursor-ring, .hero-vert-left, .hero-vert-right { display: none; } }
 </style>
+
+<script>
+  // Cursor Logic
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  document.addEventListener('mousemove', (e) => {
+    if(cursor && ring) {
+      cursor.style.left = e.clientX + 'px';
+      cursor.style.top = e.clientY + 'px';
+      ring.style.left = e.clientX - 14 + 'px';
+      ring.style.top = e.clientY - 14 + 'px';
+    }
+  });
+
+  // GİRİŞ VE REDIRECTION MANTIĞI
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>

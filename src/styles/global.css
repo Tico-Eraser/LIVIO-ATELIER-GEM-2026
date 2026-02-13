@@ -1,1 +1,28 @@
+/* 1. Temel (Uçurmuyoruz!) */
 @import "tailwindcss";
+
+/* 2. Senin Premium Renklerin ve Fontların (LIVIO DNA'sı) */
+:root {
+  --cream: #f5f0e8;
+  --bone: #e8e0d0;
+  --dark: #0e0c0a;
+  --warm-black: #1a1714;
+  --gold: #b8965a;
+  --gold-light: #d4af76;
+  --text-muted: rgba(245,240,232,0.45);
+  --text-mid: rgba(245,240,232,0.70);
+}
+
+/* 3. Genel Stil Dokunuşları */
+body {
+  background: var(--dark);
+  color: var(--cream);
+  font-family: 'Tenor Sans', sans-serif;
+  overflow-x: hidden;
+  /* Buraya senin o noise texture dikişini de ekleyebilirsin */
+}
+
+/* 4. Az Önce Konuştuğumuz Mobil Dikişler (En Alt Katman) */
+@media (max-width: 768px) {
+  /* ... senin mobil kodların ... */
+}
